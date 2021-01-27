@@ -1,4 +1,4 @@
-import { getUserWebsites } from 'lib/queries';
+import { getAllWebsites, getUserWebsites } from 'lib/queries';
 import { useAuth } from 'lib/middleware';
 import { ok, methodNotAllowed, unauthorized } from 'lib/response';
 
@@ -14,7 +14,9 @@ export default async (req, res) => {
       return unauthorized(res);
     }
 
-    const websites = await getUserWebsites(userId || current_user_id);
+    const websites = is_admin
+      ? await getAllWebsites()
+      : await getUserWebsites(userId || current_user_id);
 
     return ok(res, websites);
   }
